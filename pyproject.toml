@@ -1,0 +1,12 @@
+[tool.poetry]
+name = "Emyro"
+version = "0.1"
+authors = ["ademyrodev"]
+description = "An RPG Discord bot."
+license = "GNU General Public License v3.0"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.8"
+nextcord = { version = "^2.6.0", python = "^3.8" }
+python-dotenv = "^1.0.1"
