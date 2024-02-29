@@ -1,6 +1,7 @@
 import bot.db as db
 from bot.logger import Logger
 
+
 def display(division_id: int):
     if division_id not in range(9):
         return "None"
