@@ -2,6 +2,12 @@ import sqlite3 as sqlite
 
 INIT_STMTS = [
     """
+    CREATE TABLE IF NOT EXISTS biomes (
+        id INT PRIMARY KEY,
+        display TEXT
+    )
+    """,
+    """
     CREATE TABLE IF NOT EXISTS divisions (
         id INT PRIMARY KEY,
         display TEXT,
@@ -18,9 +24,23 @@ INIT_STMTS = [
         energy INT,
         coins INT,
         division INT,
+        biome INT,
 
-        FOREIGN KEY (division) REFERENCES divisions(id)
+        FOREIGN KEY (division) REFERENCES divisions(id),
+        FOREIGN KEY (biome) REFERENCES biomes(id)
     )
+    """,
+    """
+    INSERT OR REPLACE INTO biomes VALUES (0, 'Selva Esmeralda')
+    """,
+    """
+    INSERT OR REPLACE INTO biomes VALUES (1, 'Ventada De Llanto')
+    """,
+    """
+    INSERT OR REPLACE INTO biomes VALUES (2, 'Sérac Glacé')
+    """,
+    """
+    INSERT OR REPLACE INTO biomes VALUES (3, 'Dunkelwald')
     """,
     """
     INSERT OR REPLACE INTO divisions VALUES (0, 'Rookie', 1)
