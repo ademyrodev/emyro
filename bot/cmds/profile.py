@@ -1,7 +1,7 @@
-import nextcord
-
-from nextcord import SlashOption
 from typing import Optional
+
+import nextcord
+from nextcord import SlashOption
 
 import bot.game.divisions as divisions
 import bot.game.players as players
@@ -15,10 +15,10 @@ class ProfileCmd(Cmd):
     desc = "Shows one's profile."
 
     async def run(
-            self, 
-            interaction: nextcord.Interaction,
-            member: Optional[nextcord.Member] = SlashOption(required=False)
-        ):
+        self,
+        interaction: nextcord.Interaction,
+        member: Optional[nextcord.Member] = SlashOption(required=False),
+    ):
         user = member or interaction.user
         player = players.find(user.id)
 
