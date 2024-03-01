@@ -9,7 +9,7 @@ class Player:
         energy: int,
         coins: int,
         division: int,
-        biome: int
+        biome: int,
     ):
 
         self.id = id
@@ -24,7 +24,7 @@ class Player:
 
     @staticmethod
     def default(id):
-        return Player(id, 1, 0, 25, 100, 50, 0, 0)
+        return Player(id, 1, 0, 25, 100, 50, 0, 0, 0)
 
     @staticmethod
     def from_raw(tuple_data):

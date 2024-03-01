@@ -6,6 +6,7 @@ import nextcord
 from nextcord.ext import commands
 
 from .config import Emyro
+from .logger import Logger
 
 
 class Cmd(ABC):
@@ -30,6 +31,8 @@ class Cmd(ABC):
         )
 
         setattr(self, "run", cmd_fun)
+
+        Logger.info("Registered command", self.name)
 
     @abstractmethod
     async def run(self, interaction: nextcord.Interaction):

@@ -30,7 +30,7 @@ def register(player_id: int):
         player.energy,
         player.coins,
         player.division,
-        player.biome
+        player.biome,
     )
 
     Logger.info("Added new player", player_id, "to the database.")
@@ -50,7 +50,7 @@ def expel(cached: CachedPlayer):
             hp = ?, 
             energy = ?, 
             coins = ?, 
-            division = ? 
+            division = ?,
             biome = ?
         WHERE id = ?
         """,
