@@ -4,6 +4,7 @@ import bot.game.division as division
 import bot.game.players as players
 import bot.ui as ui
 from bot.cmd import Cmd
+from bot.game.player import Player
 
 
 class ProfileCmd(Cmd):
@@ -35,7 +36,7 @@ class ProfileCmd(Cmd):
 
         await interaction.response.send_message(embed=embed)
 
-    def division_desc(self, player):
+    def division_desc(self, player: Player):
         next_division = division.next(player.division)
 
         if not next_division:
