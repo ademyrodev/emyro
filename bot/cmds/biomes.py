@@ -12,7 +12,7 @@ class BiomesCmd(Cmd):
     async def run(self, interaction: nextcord.Interaction):
         biomes = db.fetch("SELECT * FROM biomes")
 
-        embed = nextcord.Embed(title="🌲 | Biomes", color=0x50C878)
+        embed = nextcord.Embed(title=":evergreen_tree: | Biomes", color=0x50C878)
 
         player = players.find(interaction.user.id)
 
