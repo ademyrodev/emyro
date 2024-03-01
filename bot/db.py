@@ -38,19 +38,19 @@ INIT_STMTS = [
     INSERT OR REPLACE INTO divisions VALUES (4, 'Master', 500)
     """,
     """
-    INSERT OR REPLACE INTO divisions VALUES (5, 'Champion', 750)
+    INSERT OR REPLACE INTO divisions VALUES (5, '**Champion**', 750)
     """,
     """
-    INSERT OR REPLACE INTO divisions VALUES (6, 'Legend', 1000)
+    INSERT OR REPLACE INTO divisions VALUES (6, '**Legend**', 1000)
     """,
     """
-    INSERT OR REPLACE INTO divisions VALUES (7, 'Grandmaster', 2000)
+    INSERT OR REPLACE INTO divisions VALUES (7, '**Grandmaster**', 2000)
     """,
     """
-    INSERT OR REPLACE INTO divisions VALUES (8, 'Sage', 5000)
+    INSERT OR REPLACE INTO divisions VALUES (8, '**Sage**', 5000)
     """,
     """
-    INSERT OR REPLACE INTO divisions VALUES (9, 'God', 10000)
+    INSERT OR REPLACE INTO divisions VALUES (9, '**God**', 10000)
     """,
 ]
 

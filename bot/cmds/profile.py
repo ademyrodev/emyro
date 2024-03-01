@@ -6,18 +6,18 @@ import bot.ui as ui
 from bot.cmd import Cmd
 
 
-class StatsCmd(Cmd):
-    name = "stats"
-    desc = "Shows one's stats."
+class ProfileCmd(Cmd):
+    name = "profile"
+    desc = "Shows one's profile."
 
     async def run(self, interaction: nextcord.Interaction):
         username = interaction.user.name
         player = players.find(interaction.user.id)
 
-        title = f"📜 | {username}'s profile"
+        title = f"📜 | {username}"
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
-        embed.add_field(name="⚜️ Division", value=division.display(player.division))
+        embed.add_field(name="⚜️ Division", value=self.division_desc(player))
 
         embed.add_field(name="⭐ Level", value=str(player.level))
 
@@ -34,3 +34,19 @@ class StatsCmd(Cmd):
         embed.add_field(name="🪙 Coins", value=player.coins)
 
         await interaction.response.send_message(embed=embed)
+
+    def division_desc(self, player):
+        next_division = division.next(player.division)
+
+        if not next_division:
+            return division.display(player.division)
+
+        next_division_name = next_division[1]
+        next_division_level = next_division[2]
+
+        required = next_division_level - player.level
+
+        return f"""
+        {division.display(player.division)}
+        **{next_division_name} unlocked in {required} more levels!**  
+        """
