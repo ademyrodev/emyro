@@ -37,7 +37,7 @@ class ProfileCmd(Cmd):
 
     def division_desc(self, player):
         next_division = division.next(player.division)
-        
+
         if not next_division:
             return division.display(player.division)
 
@@ -45,7 +45,7 @@ class ProfileCmd(Cmd):
         next_division_level = next_division[2]
 
         required = next_division_level - player.level
-        
+
         return f"""
         {division.display(player.division)}
         **{next_division_name} unlocked in {required} more levels!**  

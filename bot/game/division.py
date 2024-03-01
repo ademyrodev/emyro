@@ -10,6 +10,7 @@ def display(division_id: int):
 
     return data[1]
 
+
 def next(division_id: int):
     if division_id == 9:
         return None
