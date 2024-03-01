@@ -26,9 +26,9 @@ class Cmd(ABC):
 
     def register_cmd(self):
         # decorator workaround
-        cmd_fun = self.bot.slash_command(name=self.name, description=self.desc)(
-            self.run
-        )
+        cmd_fun = self.bot.slash_command(
+            name=self.name, description=self.desc, guild_ids=Emyro.guilds
+        )(self.run)
 
         setattr(self, "run", cmd_fun)
 

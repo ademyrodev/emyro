@@ -1,6 +1,6 @@
 import nextcord
 
-import bot.game.division as division
+import bot.game.divisions as divisions
 import bot.game.players as players
 import bot.ui as ui
 from bot.cmd import Cmd
@@ -37,10 +37,10 @@ class ProfileCmd(Cmd):
         await interaction.response.send_message(embed=embed)
 
     def division_desc(self, player: Player):
-        next_division = division.next(player.division)
+        next_division = divisions.next(player.division)
 
         if not next_division:
-            return division.display(player.division)
+            return divisions.display(player.division)
 
         next_division_name = next_division[1]
         next_division_level = next_division[2]
@@ -48,6 +48,6 @@ class ProfileCmd(Cmd):
         required = next_division_level - player.level
 
         return f"""
-        {division.display(player.division)}
+        {divisions.display(player.division)}
         {next_division_name} **unlocked in {required} more levels!**  
         """
