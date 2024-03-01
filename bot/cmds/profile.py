@@ -1,6 +1,9 @@
-import nextcord
+from typing import Optional
 
-import bot.game.division as division
+import nextcord
+from nextcord import SlashOption
+
+import bot.game.divisions as divisions
 import bot.game.players as players
 import bot.ui as ui
 from bot.cmd import Cmd
@@ -11,11 +14,15 @@ class ProfileCmd(Cmd):
     name = "profile"
     desc = "Shows one's profile."
 
-    async def run(self, interaction: nextcord.Interaction):
-        username = interaction.user.name
-        player = players.find(interaction.user.id)
+    async def run(
+        self,
+        interaction: nextcord.Interaction,
+        member: Optional[nextcord.Member] = SlashOption(required=False),
+    ):
+        user = member or interaction.user
+        player = players.find(user.id)
 
-        title = f"📜 | {username}"
+        title = f"📜 | {user.name}"
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
         embed.add_field(name="⚜️ Division", value=self.division_desc(player))
@@ -37,10 +44,10 @@ class ProfileCmd(Cmd):
         await interaction.response.send_message(embed=embed)
 
     def division_desc(self, player: Player):
-        next_division = division.next(player.division)
+        next_division = divisions.next(player.division)
 
         if not next_division:
-            return division.display(player.division)
+            return divisions.display(player.division)
 
         next_division_name = next_division[1]
         next_division_level = next_division[2]
@@ -48,6 +55,6 @@ class ProfileCmd(Cmd):
         required = next_division_level - player.level
 
         return f"""
-        {division.display(player.division)}
-        **{next_division_name} unlocked in {required} more levels!**  
+        {divisions.display(player.division)}
+        {next_division_name} **unlocked in {required} more levels!**  
         """
