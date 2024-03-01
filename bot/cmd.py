@@ -10,17 +10,17 @@ from .logger import Logger
 
 
 class Cmd(ABC):
-    name: str = None
-    desc: str = None
+    name = None
+    desc = None
 
     def __init__(self, bot: commands.Bot):
         self.bot = bot
 
         if not self.name:
-            raise ValueError("Missing command name.")
+            raise ValueError("Missing command name ('name' field.)")
 
         if not self.desc:
-            raise ValueError("Missing description.")
+            raise ValueError("Missing description ('desc' field.)")
 
         self.register_cmd()
 

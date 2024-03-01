@@ -1,6 +1,7 @@
 import nextcord
 from nextcord.ext import commands
 
+import bot.event as event
 import bot.cmd as cmd
 import bot.db as db
 import bot.game.players as players
@@ -14,6 +15,7 @@ if __name__ == "__main__":
     bot = commands.Bot(intents=intents, default_guild_ids=Emyro.guilds)
 
     db.init()
+    event.register_events(bot)
     cmd.register_cmds(bot)
 
     bot.run(Emyro.token)
