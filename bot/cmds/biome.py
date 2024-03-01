@@ -3,6 +3,7 @@ from typing import Optional
 import nextcord
 from nextcord import SlashOption
 
+import bot.db as db
 import bot.game.biomes as biomes
 import bot.game.players as players
 from bot.cmd import Cmd
