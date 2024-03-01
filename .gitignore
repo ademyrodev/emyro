@@ -1,6 +1,9 @@
 # Bot-specific data we shouldn't share
 .env
 
+# SQLite3
+data.db
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
