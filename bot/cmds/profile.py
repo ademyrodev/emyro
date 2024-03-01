@@ -49,5 +49,5 @@ class ProfileCmd(Cmd):
 
         return f"""
         {division.display(player.division)}
-        **{next_division_name} unlocked in {required} more levels!**  
+        {next_division_name} **unlocked in {required} more levels!**  
         """

@@ -31,16 +31,16 @@ INIT_STMTS = [
     )
     """,
     """
-    INSERT OR REPLACE INTO biomes VALUES (0, 'Selva Esmeralda')
+    INSERT OR REPLACE INTO biomes VALUES (0, '🌿 Selva Esmeralda')
     """,
     """
-    INSERT OR REPLACE INTO biomes VALUES (1, 'Ventada De Llanto')
+    INSERT OR REPLACE INTO biomes VALUES (1, '🏜️  Ventada De Llanto')
     """,
     """
-    INSERT OR REPLACE INTO biomes VALUES (2, 'Sérac Glacé')
+    INSERT OR REPLACE INTO biomes VALUES (2, '🏔️  Sérac Glacé')
     """,
     """
-    INSERT OR REPLACE INTO biomes VALUES (3, 'Dunkelwald')
+    INSERT OR REPLACE INTO biomes VALUES (3, '🌲 Dunkelwald')
     """,
     """
     INSERT OR REPLACE INTO divisions VALUES (0, 'Rookie', 1)
