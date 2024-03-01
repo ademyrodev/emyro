@@ -1,5 +1,8 @@
 import nextcord
 
+from nextcord import SlashOption
+from typing import Optional
+
 import bot.game.divisions as divisions
 import bot.game.players as players
 import bot.ui as ui
@@ -11,11 +14,15 @@ class ProfileCmd(Cmd):
     name = "profile"
     desc = "Shows one's profile."
 
-    async def run(self, interaction: nextcord.Interaction):
-        username = interaction.user.name
-        player = players.find(interaction.user.id)
+    async def run(
+            self, 
+            interaction: nextcord.Interaction,
+            member: Optional[nextcord.Member] = SlashOption(required=False)
+        ):
+        user = member or interaction.user
+        player = players.find(user.id)
 
-        title = f"📜 | {username}"
+        title = f"📜 | {user.name}"
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
         embed.add_field(name="⚜️ Division", value=self.division_desc(player))
