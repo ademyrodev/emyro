@@ -21,7 +21,7 @@ def register(player_id: int):
     player = Player.default(player_id)
 
     db.commit(
-        "INSERT INTO players VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        "INSERT INTO players VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
         player_id,
         player.level,
         player.xp,
@@ -30,6 +30,7 @@ def register(player_id: int):
         player.energy,
         player.coins,
         player.division,
+        player.biome
     )
 
     Logger.info("Added new player", player_id, "to the database.")
@@ -37,7 +38,7 @@ def register(player_id: int):
     return db.fetch("SELECT * FROM players WHERE id = ?", player_id)
 
 
-def save_cache(cached: CachedPlayer):
+def expel(cached: CachedPlayer):
     player = cached.player
 
     db.commit(
@@ -50,6 +51,7 @@ def save_cache(cached: CachedPlayer):
             energy = ?, 
             coins = ?, 
             division = ? 
+            biome = ?
         WHERE id = ?
         """,
         player.level,
@@ -59,6 +61,7 @@ def save_cache(cached: CachedPlayer):
         player.energy,
         player.coins,
         player.division,
+        player.biome,
         player.id,
     )
 
@@ -72,7 +75,7 @@ def filter_out_unused_cache():
     evicted_cache = least_used_cache[:evicted_amount]
 
     for e in evicted_cache:
-        save_cache(e)
+        expel(e)
         del player_cache[e.player.id]
 
 
@@ -114,5 +117,5 @@ def cleanup():
     cache_copy = dict(player_cache)
 
     for k, v in cache_copy.items():
-        save_cache(v)
+        expel(v)
         del player_cache[k]

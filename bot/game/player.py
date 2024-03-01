@@ -9,6 +9,7 @@ class Player:
         energy: int,
         coins: int,
         division: int,
+        biome: int
     ):
 
         self.id = id
@@ -19,6 +20,7 @@ class Player:
         self.energy = energy
         self.coins = coins
         self.division = division
+        self.biome = biome
 
     @staticmethod
     def default(id):
