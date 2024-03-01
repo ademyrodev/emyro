@@ -6,15 +6,15 @@ import bot.ui as ui
 from bot.cmd import Cmd
 
 
-class StatsCmd(Cmd):
-    name = "stats"
-    desc = "Shows one's stats."
+class ProfileCmd(Cmd):
+    name = "profile"
+    desc = "Shows one's profile."
 
     async def run(self, interaction: nextcord.Interaction):
         username = interaction.user.name
         player = players.find(interaction.user.id)
 
-        title = f"📜 | {username}'s profile"
+        title = f"📜 | {username}"
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
         embed.add_field(name="⚜️ Division", value=division.display(player.division))
