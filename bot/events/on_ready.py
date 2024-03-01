@@ -1,5 +1,9 @@
 import asyncio
 
+from datetime import datetime
+
+from bot.game.world import World
+
 from bot.logger import Logger
 from bot.event import Event
 
@@ -13,8 +17,14 @@ class OnReadyEvent(Event):
 
     async def time_timer(self):
         while True:
-            Logger.info("Timer task executed!")
-            await asyncio.sleep(10)
+            World.daytime = not World.daytime
+            Logger.info("Set daytime to", World.daytime)
 
+            now = datetime.now()
+            World.last_daytime_flip = (now.minute, now.second)
+
+            Logger.info("Last daytime flip:", World.last_daytime_flip)
+
+            await asyncio.sleep(30)
             # temporary placeholder.
             ...
