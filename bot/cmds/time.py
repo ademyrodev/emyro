@@ -22,7 +22,7 @@ class TimeCmd(Cmd):
             elapsed_time += 60
 
         time_left_msg = ""
-        if elapsed_time == 9:
+        if elapsed_time == 10:
             time_left_msg = f"{60 - now.second} seconds left"
         else:
             time_left_msg = f"{10 - elapsed_time} minutes left"
