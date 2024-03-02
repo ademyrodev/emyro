@@ -1,12 +1,16 @@
 import sqlite3 as sqlite
 
+from bot.game.player import Player
+from bot.game.biomes import DayNightCounter
+from bot.logger import Logger
+
 INIT_STMTS = [
     """
-    CREATE TABLE IF NOT EXISTS player_biomes (
+    CREATE TABLE IF NOT EXISTS biome_days (
         player_id INT,
         biome_id INT,
-        player_days INT,
-        player_nights INT,
+        days INT,
+        nights INT,
 
         PRIMARY KEY (player_id, biome_id),
         FOREIGN KEY (player_id) REFERENCES players(id),
@@ -86,43 +90,146 @@ INIT_STMTS = [
     """,
 ]
 
-conn = sqlite.connect("data.db")
+class Db:
+    conn = sqlite.connect("data.db")
 
+    def fetch_biome_ids():
+        return Db.fetch("SELECT id FROM biomes")
 
-def init():
-    cur = conn.cursor()
+    @staticmethod
+    def fetch_player(player_id: int):
+        player_data = Db.fetch(
+            "SELECT * FROM players WHERE id = ?", player_id
+        ) or Db.register(player_id)
 
-    for i, s in enumerate(INIT_STMTS):
-        cur.execute(s)
+        player_data = player_data[0]
 
-    conn.commit()
+        biome_days = []
+        for b in self.fetch_biome_ids():
+            days, nights = Db.fetch(
+                """
+                SELECT days, nights FROM biome_days 
+                WHERE player_id = ?, biome_id = ?
+                """,
+                player_id,
+                b
+            )
 
+            biome_days.append(
+                DayNightCounter(days, nights)
+            )
 
-def raw_exec(stmt: str, *args):
-    cur = conn.cursor()
+        player_data.append(biome_days)
+        
+        return player_data
+        
+    @staticmethod
+    def update(player: Player):
+        Db.commit(
+            """
+            UPDATE players SET 
+                level = ?,
+                xp = ?, 
+                req_xp = ?, 
+                hp = ?, 
+                energy = ?, 
+                coins = ?, 
+                division = ?,
+                biome = ?
+            WHERE id = ?
+            """,
+            player.level,
+            player.xp,
+            player.req_xp,
+            player.hp,
+            player.energy,
+            player.coins,
+            player.division,
+            player.biome,
+            player.id,
+        )
 
-    cur.execute(stmt, args)
+        for b in self.fetch_biome_ids():
+            Db.commit(
+                """
+                UPDATE biome_days SET
+                    days = ?,
+                    nights = ?
+                WHERE player_id = ?, biome_id = ?
+                """,
+                player.biomes[b].days,
+                player.biomes[b].nights,
+                player.id,
+                b
+            )
 
-    return cur
+        Logger.info("Updated player with ID", player.id, "to the database.")
 
+    @staticmethod
+    def register(player_id: int):
+        player = Player.default(player_id)
 
-def commit(stmt: str, *args):
-    cur = raw_exec(stmt, *args)
+        Db.commit(
+            "INSERT INTO players VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            player_id,
+            player.level,
+            player.xp,
+            player.req_xp,
+            player.hp,
+            player.energy,
+            player.coins,
+            player.division,
+            player.biome,
+        )
 
-    conn.commit()
+        for b in self.fetch_biome_ids():
+            Db.commit(
+                "INSERT INTO biome_days VALUES (?, ?, ?, ?)",
+                player_id,
+                b,
+                0,
+                0
+            )
 
+        Logger.info("Added new player", player_id, "to the database.")
 
-def fetch(stmt: str, *args):
-    cur = raw_exec(stmt, *args)
+        return Db.fetch("SELECT * FROM players WHERE id = ?", player_id)
 
-    vals = cur.fetchall()
+    @staticmethod
+    def init():
+        cur = conn.cursor()
 
-    return vals
+        for i, s in enumerate(INIT_STMTS):
+            cur.execute(s)
 
+        conn.commit()
 
-def dump(table):
-    print(fetch(f"SELECT * FROM {table}"))
+    @staticmethod
+    def raw_exec(stmt: str, *args):
+        cur = conn.cursor()
 
+        cur.execute(stmt, args)
 
-def close():
-    conn.close()
+        return cur
+
+    @staticmethod
+    def commit(stmt: str, *args):
+        cur = Db.raw_exec(stmt, *args)
+
+        conn.commit()
+
+    @staticmethod
+    def fetch(stmt: str, *args):
+        cur = Db.raw_exec(stmt, *args)
+
+        vals = cur.fetchall()
+
+        return vals
+
+    @staticmethod
+    def dump(table: str):
+        print(Db.fetch(f"SELECT * FROM {table}"))
+
+    @staticmethod
+    def close():
+        conn.close()
