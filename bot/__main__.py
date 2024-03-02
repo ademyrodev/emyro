@@ -3,9 +3,9 @@ from nextcord.ext import commands
 
 import bot.event as event
 import bot.cmd as cmd
-import bot.db as db
 import bot.game.players as players
 
+from bot.db import Db
 from .config import Emyro
 
 if __name__ == "__main__":
@@ -14,11 +14,11 @@ if __name__ == "__main__":
 
     bot = commands.Bot(intents=intents, default_guild_ids=Emyro.guilds)
 
-    db.init()
+    Db.init()
     event.register_events(bot)
     cmd.register_cmds(bot)
 
     bot.run(Emyro.token)
 
     players.cleanup()
-    db.close()
+    Db.close()

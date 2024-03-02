@@ -1,6 +1,6 @@
 import nextcord
 
-import bot.db as db
+from bot.db import Db
 from bot.game.player import Player
 from bot.logger import Logger
 
@@ -20,7 +20,7 @@ class CachedPlayer:
 def expel(cached: CachedPlayer):
     player = cached.player
 
-    db.update(player)
+    player.update()
 
     Logger.info("Expelled from the cache and saved player with ID", player.id)
 
@@ -48,9 +48,7 @@ def cache(player: Player):
 
 
 def find_from_db(player_id: int):
-    player_data = db.fetch_player(player_id)
-
-    player = Player.from_raw(player_data)
+    player = Player.fetch_from_db(player_id)
 
     cache(player)
     return player
