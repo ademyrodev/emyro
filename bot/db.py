@@ -2,6 +2,18 @@ import sqlite3 as sqlite
 
 INIT_STMTS = [
     """
+    CREATE TABLE IF NOT EXISTS player_biomes (
+        player_id INT,
+        biome_id INT,
+        player_days INT,
+        player_nights INT,
+
+        PRIMARY KEY (player_id, biome_id),
+        FOREIGN KEY (player_id) REFERENCES players(id),
+        FOREIGN KEY (biome_id) REFERENCES biomes(id)
+    )
+    """,
+    """
     CREATE TABLE IF NOT EXISTS biomes (
         id INT PRIMARY KEY,
         display TEXT
