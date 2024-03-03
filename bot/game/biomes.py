@@ -1,6 +1,5 @@
 from bot.db import Db
 
-
 class DayNightCounter:
     def __init__(self, days, nights):
         self.days = days

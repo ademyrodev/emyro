@@ -12,6 +12,7 @@ class CachedPlayer:
     def __init__(self, player: Player):
         self.player = player
         self.uses = 0
+        self.has_changed_biome = False
 
     def increment_uses(self):
         self.uses += 1

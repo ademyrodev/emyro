@@ -34,9 +34,9 @@ class Player:
 
     @staticmethod
     def default(id):
-        day_night = [DayNightCounter.default()] * 4
+        biomes = [DayNightCounter.default()] * 4
 
-        return Player(id, 1, 0, 25, 100, 50, 0, 0, 0, day_night, DayNightCounter.default())
+        return Player(id, 1, 0, 25, 100, 50, 0, 0, 0, DayNightCounter.default(), biomes)
 
     @staticmethod
     def from_raw(data):
