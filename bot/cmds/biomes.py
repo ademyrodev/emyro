@@ -1,6 +1,6 @@
 import nextcord
 
-import bot.db as db
+import bot.game.biomes as biomes
 import bot.game.players as players
 from bot.cmd import Cmd
 
@@ -10,17 +10,18 @@ class BiomesCmd(Cmd):
     desc = "Lists all available biomes."
 
     async def run(self, interaction: nextcord.Interaction):
-        biomes = db.fetch("SELECT * FROM biomes")
-
         embed = nextcord.Embed(title=":evergreen_tree: | Biomes", color=0x50C878)
 
         player = players.find(interaction.user.id)
 
-        for b in biomes:
-            biome_id = b[0]
-            biome_name = b[1]
-            desc = "**You're currently here!**" if player.biome == biome_id else ""
+        for b in biomes.ids():
+            biome_name = biomes.display(b)
 
-            embed.add_field(name=biome_name, value=desc)
+            days, nights = player.biomes[b].as_tuple()
+
+            desc = f"{days} days | {nights} nights\n"
+            details = "**You're currently here!**" if player.biome == b else ""
+
+            embed.add_field(name=biome_name, value=desc + details)
 
         await interaction.response.send_message(embed=embed)

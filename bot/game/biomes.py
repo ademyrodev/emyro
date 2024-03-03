@@ -10,6 +10,9 @@ class DayNightCounter:
     def default():
         return DayNightCounter(0, 0)
 
+    def as_tuple(self):
+        return (self.days, self.nights)
+
     def __repr__(self):
         return f"({self.days}|{self.nights})"
 
