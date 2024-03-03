@@ -1,8 +1,11 @@
 import asyncio
-
 from datetime import datetime
 
+import bot.events.events as events
+import bot.game.players as players
+from bot.events.subject import Subject
 from bot.logger import Logger
+
 
 class World:
     daytime = False
@@ -20,5 +23,7 @@ class World:
             World.last_daytime_flip = now.minute
 
             Logger.info("Last daytime flip:", World.last_daytime_flip)
+
+            Subject.notify(events.DaytimeFlipEvent())
 
             await asyncio.sleep(World.day_length_seconds)

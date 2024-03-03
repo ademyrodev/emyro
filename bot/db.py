@@ -1,6 +1,20 @@
 import sqlite3 as sqlite
 
+from bot.logger import Logger
+
 INIT_STMTS = [
+    """
+    CREATE TABLE IF NOT EXISTS biome_days (
+        player_id INT,
+        biome_id INT,
+        days INT,
+        nights INT,
+
+        PRIMARY KEY (player_id, biome_id),
+        FOREIGN KEY (player_id) REFERENCES players(id),
+        FOREIGN KEY (biome_id) REFERENCES biomes(id)
+    )
+    """,
     """
     CREATE TABLE IF NOT EXISTS biomes (
         id INT PRIMARY KEY,
@@ -25,6 +39,8 @@ INIT_STMTS = [
         coins INT,
         division INT,
         biome INT,
+        total_days INT,
+        total_nights INT,
 
         FOREIGN KEY (division) REFERENCES divisions(id),
         FOREIGN KEY (biome) REFERENCES biomes(id)
@@ -74,43 +90,45 @@ INIT_STMTS = [
     """,
 ]
 
-conn = sqlite.connect("data.db")
 
+class Db:
+    conn = sqlite.connect("data.db")
 
-def init():
-    cur = conn.cursor()
+    @staticmethod
+    def init():
+        cur = Db.conn.cursor()
 
-    for i, s in enumerate(INIT_STMTS):
-        cur.execute(s)
+        for i, s in enumerate(INIT_STMTS):
+            cur.execute(s)
 
-    conn.commit()
+        Db.conn.commit()
 
+    @staticmethod
+    def raw_exec(stmt: str, *args):
+        cur = Db.conn.cursor()
 
-def raw_exec(stmt: str, *args):
-    cur = conn.cursor()
+        cur.execute(stmt, args)
 
-    cur.execute(stmt, args)
+        return cur
 
-    return cur
+    @staticmethod
+    def commit(stmt: str, *args):
+        cur = Db.raw_exec(stmt, *args)
 
+        Db.conn.commit()
 
-def commit(stmt: str, *args):
-    cur = raw_exec(stmt, *args)
+    @staticmethod
+    def fetch(stmt: str, *args):
+        cur = Db.raw_exec(stmt, *args)
 
-    conn.commit()
+        vals = cur.fetchall()
 
+        return vals
 
-def fetch(stmt: str, *args):
-    cur = raw_exec(stmt, *args)
+    @staticmethod
+    def dump(table: str):
+        print(Db.fetch(f"SELECT * FROM {table}"))
 
-    vals = cur.fetchall()
-
-    return vals
-
-
-def dump(table):
-    print(fetch(f"SELECT * FROM {table}"))
-
-
-def close():
-    conn.close()
+    @staticmethod
+    def close():
+        Db.conn.close()
