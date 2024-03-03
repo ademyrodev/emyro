@@ -25,11 +25,15 @@ class ProfileCmd(Cmd):
         title = f":scroll: | {user.name}"
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
-        embed.add_field(name=":fleur_de_lis: Division", value=self.division_desc(player))
+        embed.add_field(
+            name=":fleur_de_lis: Division", value=self.division_desc(player)
+        )
 
         embed.add_field(name=":star: Level", value=str(player.level))
 
-        embed.add_field(name=":sparkles: XP", value=ui.progress_bar(player.xp, player.req_xp))
+        embed.add_field(
+            name=":sparkles: XP", value=ui.progress_bar(player.xp, player.req_xp)
+        )
 
         # not actually a progress bar, we're tricking players here
         hp_bar = ui.progress_bar(player.hp, player.hp, show_percent=False)

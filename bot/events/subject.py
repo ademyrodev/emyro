@@ -4,6 +4,7 @@ import os
 from bot.events.events import Event
 from bot.logger import Logger
 
+
 class Subject:
     observers = []
 
@@ -20,7 +21,7 @@ class Subject:
 
         for e in entries:
             full_path = os.path.join(path, e.name)
-            
+
             if e.is_dir():
                 Subject.register_observers(bot, full_path)
                 continue

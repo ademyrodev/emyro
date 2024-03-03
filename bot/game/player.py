@@ -1,8 +1,8 @@
 import bot.game.biomes as biomes
-
 from bot.db import Db
-from bot.logger import Logger
 from bot.game.biomes import DayNightCounter
+from bot.logger import Logger
+
 
 class Player:
     def __init__(
@@ -64,14 +64,14 @@ class Player:
                 WHERE player_id = ? AND biome_id = ?
                 """,
                 player_id,
-                b
+                b,
             )[0]
 
             counter = DayNightCounter(days, nights)
             biome_days.append(counter)
 
         player_data.append(biome_days)
-        
+
         return Player.from_raw(player_data)
 
     @staticmethod
@@ -90,17 +90,11 @@ class Player:
             player.division,
             player.biome,
             player.total_days.days,
-            player.total_days.nights
+            player.total_days.nights,
         )
 
         for b in biomes.ids():
-            Db.commit(
-                "INSERT INTO biome_days VALUES (?, ?, ?, ?)",
-                player_id,
-                b,
-                0,
-                0
-            )
+            Db.commit("INSERT INTO biome_days VALUES (?, ?, ?, ?)", player_id, b, 0, 0)
 
         Logger.info("Added new player", player_id, "to the database.")
 
@@ -146,8 +140,7 @@ class Player:
                 self.biomes[b].days,
                 self.biomes[b].nights,
                 self.id,
-                b
+                b,
             )
 
         Logger.info("Updated player with ID", self.id, "to the database.")
-

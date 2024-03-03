@@ -1,12 +1,11 @@
 import asyncio
-
 from datetime import datetime
 
-import bot.game.players as players
 import bot.events.events as events
-
-from bot.logger import Logger
+import bot.game.players as players
 from bot.events.subject import Subject
+from bot.logger import Logger
+
 
 class World:
     daytime = False

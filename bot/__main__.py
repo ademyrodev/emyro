@@ -1,15 +1,15 @@
 import asyncio
+
 import nextcord
 from nextcord.ext import commands
 
-from bot.game.world import World
-from bot.events.subject import Subject
-
 import bot.cmd as cmd
 import bot.game.players as players
+from bot.events.subject import Subject
+from bot.game.world import World
 
-from .db import Db
 from .config import Emyro
+from .db import Db
 from .logger import Logger
 
 if __name__ == "__main__":
@@ -33,4 +33,3 @@ if __name__ == "__main__":
 
     players.cleanup()
     Db.close()
-

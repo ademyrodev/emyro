@@ -90,9 +90,9 @@ INIT_STMTS = [
     """,
 ]
 
+
 class Db:
     conn = sqlite.connect("data.db")
-
 
     @staticmethod
     def init():

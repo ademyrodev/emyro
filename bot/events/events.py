@@ -1,8 +1,8 @@
-from dataclasses import dataclass
 from abc import ABC
+from dataclasses import dataclass
 
-class Event(ABC):
-    ...
 
-class DaytimeFlipEvent(Event):
-    ...
+class Event(ABC): ...
+
+
+class DaytimeFlipEvent(Event): ...

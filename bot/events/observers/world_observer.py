@@ -1,9 +1,9 @@
 import bot.events.events as events
 import bot.game.players as players
-
+from bot.events.observer import Observer
 from bot.game.biomes import DayNightCounter
 from bot.game.world import World
-from bot.events.observer import Observer
+
 
 class WorldObserver(Observer):
     def on_notify(self, event: events.Event):
@@ -23,13 +23,9 @@ class WorldObserver(Observer):
 
             biome = player.biome
             self.increment_day_count(player.biomes[biome])
-    
-    def increment_day_count(
-        self, 
-        counter: DayNightCounter 
-    ):
+
+    def increment_day_count(self, counter: DayNightCounter):
         if not World.daytime:
             counter.days += 1
         else:
             counter.nights += 1
-            

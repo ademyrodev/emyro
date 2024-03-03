@@ -1,5 +1,6 @@
 from bot.db import Db
 
+
 class DayNightCounter:
     def __init__(self, days, nights):
         self.days = days
@@ -15,7 +16,7 @@ class DayNightCounter:
     def __repr__(self):
         return f"({self.days}|{self.nights})"
 
-    
+
 def display(biome_id: int):
     if biome_id > 3:
         return None
