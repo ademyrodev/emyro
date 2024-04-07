@@ -44,6 +44,10 @@ class ProfileCmd(Cmd):
         embed.add_field(name=":zap: Energy", value=energy_bar)
 
         embed.add_field(name=":coin: Coins", value=player.coins)
+        embed.add_field(name=":gem: Shards", value=player.shards)
+
+        embed.add_field(name=":dagger: Weapon", value=player.weapon.name)
+        embed.add_field(name=":shield: Armor", value=player.armor.name)
 
         await interaction.response.send_message(embed=embed)
 
