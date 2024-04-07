@@ -37,6 +37,9 @@ INIT_STMTS = [
         hp INT,
         energy INT,
         coins INT,
+        shards INT,
+        weapon TEXT,
+        armor TEXT,
         division INT,
         biome INT,
         total_days INT,
@@ -87,7 +90,7 @@ INIT_STMTS = [
     """,
     """
     INSERT OR REPLACE INTO divisions VALUES (9, '**God**', 10000)
-    """,
+    """
 ]
 
 
