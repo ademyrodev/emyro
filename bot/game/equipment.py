@@ -49,7 +49,7 @@ class Equipment:
     def json(self):
         as_dict = {
             "name": self.name,
-            "nature": self.nature,
+            "nature": self.nature.value,
             "enhancements": [e.as_dict() for e in self.enhancements],
             "speed": self.speed, 
             "attack": self.attack,

@@ -74,9 +74,9 @@ class Player:
     def fetch_from_db(player_id: int):
         player_data = Db.fetch(
             "SELECT * FROM players WHERE id = ?", player_id
-        )[0] or Player.register(player_id)
+        ) or Player.register(player_id)
 
-        print(player_data)
+        player_data = list(player_data[0])
 
         weapon_json = player_data[8]
         armor_json = player_data[9]
@@ -86,8 +86,6 @@ class Player:
 
         player_data[8] = weapon
         player_data[9] = armor
-
-        player_data = list(player_data[0])
 
         biome_days = []
         for b in biomes.ids():
@@ -134,7 +132,7 @@ class Player:
 
         Logger.info("Added new player", player_id, "to the database.")
 
-        return Db.fetch("SELECT * FROM players WHERE id = ?", player_id)
+        return [Db.fetch("SELECT * FROM players WHERE id = ?", player_id)]
 
     def update(self):
         Db.commit(
@@ -162,8 +160,8 @@ class Player:
             self.energy,
             self.coins,
             self.shards,
-            self.weapon,
-            self.armor,
+            self.weapon.json(),
+            self.armor.json(),
             self.division,
             self.biome,
             self.total_days.days,
