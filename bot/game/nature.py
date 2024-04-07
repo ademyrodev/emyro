@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class Nature(Enum):
     NONE = 0
     FIRE = 1
@@ -18,7 +19,7 @@ class Nature(Enum):
     def __plus__(self, other):
         if self.value == other.value:
             return self
-        
+
         left = Nature(min(self.value, other.value))
         right = Nature(max(self.value, other.value))
 
@@ -26,36 +27,12 @@ class Nature(Enum):
 
 
 ADVANTAGES = {
-    Nature.FIRE: [
-        Nature.AIR,
-        Nature.EARTH,
-        Nature.FROST
-    ],
-    Nature.AIR: [
-        Nature.EARTH,
-        Nature.SAND,
-        Nature.DECAY
-    ],
-    Nature.WATER: [
-        Nature.FIRE,
-        Nature.AIR,
-        Nature.DECAY
-    ],
-    Nature.FROST: [
-        Nature.AIR,
-        Nature.WATER,
-        Nature.SAND
-    ],
-    Nature.SAND: [
-        Nature.FIRE,
-        Nature.WATER,
-        Nature.DECAY
-    ],
-    Nature.DECAY: [
-        Nature.FIRE,
-        Nature.EARTH,
-        Nature.FROST
-    ]
+    Nature.FIRE: [Nature.AIR, Nature.EARTH, Nature.FROST],
+    Nature.AIR: [Nature.EARTH, Nature.SAND, Nature.DECAY],
+    Nature.WATER: [Nature.FIRE, Nature.AIR, Nature.DECAY],
+    Nature.FROST: [Nature.AIR, Nature.WATER, Nature.SAND],
+    Nature.SAND: [Nature.FIRE, Nature.WATER, Nature.DECAY],
+    Nature.DECAY: [Nature.FIRE, Nature.EARTH, Nature.FROST],
 }
 
 COMBINATIONS: {
@@ -66,7 +43,7 @@ COMBINATIONS: {
         Nature.EARTH,
         Nature.FROST,
         Nature.SAND,
-        Nature.DECAY
+        Nature.DECAY,
     ],
     Nature.FIRE: [
         Nature.FIRE,
@@ -75,7 +52,7 @@ COMBINATIONS: {
         Nature.SAND,
         Nature.WATER,
         Nature.EARTH,
-        Nature.DECAY
+        Nature.DECAY,
     ],
     Nature.AIR: [
         Nature.AIR,
@@ -83,31 +60,17 @@ COMBINATIONS: {
         Nature.DECAY,
         Nature.WATER,
         Nature.SAND,
-        Nature.DECAY
+        Nature.DECAY,
     ],
     Nature.WATER: [
         Nature.WATER,
         Nature.EARTH,
         Nature.FROST,
         Nature.DECAY,
-        Nature.EARTH
-    ],
-    Nature.EARTH: [
         Nature.EARTH,
-        Nature.WATER,
-        Nature.AIR,
-        Nature.SAND 
     ],
-    Nature.FROST: [
-        Nature.FROST,
-        Nature.EARTH,
-        Nature.WATER
-    ],
-    Nature.SAND: [
-        Nature.SAND,
-        Nature.FIRE
-    ],
-    Nature.DECAY: [
-        Nature.DECAY
-    ]
+    Nature.EARTH: [Nature.EARTH, Nature.WATER, Nature.AIR, Nature.SAND],
+    Nature.FROST: [Nature.FROST, Nature.EARTH, Nature.WATER],
+    Nature.SAND: [Nature.SAND, Nature.FIRE],
+    Nature.DECAY: [Nature.DECAY],
 }

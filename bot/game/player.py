@@ -1,8 +1,8 @@
 import bot.game.biomes as biomes
 from bot.db import Db
 from bot.game.biomes import DayNightCounter
-from bot.logger import Logger
 from bot.game.equipment import Equipment
+from bot.logger import Logger
 
 
 class Player:
@@ -44,20 +44,20 @@ class Player:
         biomes = [DayNightCounter.default()] * 4
 
         return Player(
-            id, 
-            1, 
-            0, 
-            25, 
-            100, 
-            50, 
-            0, 
+            id,
+            1,
+            0,
+            25,
+            100,
+            50,
+            0,
             0,
             Equipment.none(),
             Equipment.none(),
-            0, 
-            0, 
-            DayNightCounter.default(), 
-            biomes
+            0,
+            0,
+            DayNightCounter.default(),
+            biomes,
         )
 
     @staticmethod
@@ -80,7 +80,7 @@ class Player:
 
         weapon_json = player_data[8]
         armor_json = player_data[9]
-        
+
         weapon = Equipment.from_json(weapon_json)
         armor = Equipment.from_json(armor_json)
 

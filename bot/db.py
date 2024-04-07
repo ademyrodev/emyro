@@ -90,7 +90,7 @@ INIT_STMTS = [
     """,
     """
     INSERT OR REPLACE INTO divisions VALUES (9, '**God**', 10000)
-    """
+    """,
 ]
 
 
