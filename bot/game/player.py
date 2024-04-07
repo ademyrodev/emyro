@@ -2,6 +2,7 @@ import bot.game.biomes as biomes
 from bot.db import Db
 from bot.game.biomes import DayNightCounter
 from bot.logger import Logger
+from bot.game.equipment import Equipment
 
 
 class Player:
@@ -14,6 +15,9 @@ class Player:
         hp: int,
         energy: int,
         coins: int,
+        shards: int,
+        weapon: Equipment,
+        armor: Equipment,
         division: int,
         biome: int,
         total_days: DayNightCounter,
@@ -27,6 +31,9 @@ class Player:
         self.hp = hp
         self.energy = energy
         self.coins = coins
+        self.shards = shards
+        self.weapon = weapon
+        self.armor = armor
         self.division = division
         self.biome = biome
         self.biomes = biomes
@@ -36,7 +43,22 @@ class Player:
     def default(id):
         biomes = [DayNightCounter.default()] * 4
 
-        return Player(id, 1, 0, 25, 100, 50, 0, 0, 0, DayNightCounter.default(), biomes)
+        return Player(
+            id, 
+            1, 
+            0, 
+            25, 
+            100, 
+            50, 
+            0, 
+            0,
+            Equipment.none(),
+            Equipment.none(),
+            0, 
+            0, 
+            DayNightCounter.default(), 
+            biomes
+        )
 
     @staticmethod
     def from_raw(data):
@@ -52,7 +74,18 @@ class Player:
     def fetch_from_db(player_id: int):
         player_data = Db.fetch(
             "SELECT * FROM players WHERE id = ?", player_id
-        ) or Player.register(player_id)
+        )[0] or Player.register(player_id)
+
+        print(player_data)
+
+        weapon_json = player_data[8]
+        armor_json = player_data[9]
+        
+        weapon = Equipment.from_json(weapon_json)
+        armor = Equipment.from_json(armor_json)
+
+        player_data[8] = weapon
+        player_data[9] = armor
 
         player_data = list(player_data[0])
 
@@ -79,7 +112,7 @@ class Player:
         player = Player.default(player_id)
 
         Db.commit(
-            "INSERT INTO players VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT INTO players VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             player_id,
             player.level,
             player.xp,
@@ -87,6 +120,9 @@ class Player:
             player.hp,
             player.energy,
             player.coins,
+            player.shards,
+            player.weapon.json(),
+            player.armor.json(),
             player.division,
             player.biome,
             player.total_days.days,
@@ -110,6 +146,9 @@ class Player:
                 hp = ?, 
                 energy = ?, 
                 coins = ?, 
+                shards = ?,
+                weapon = ?,
+                armor = ?,
                 division = ?,
                 biome = ?,
                 total_days = ?,
@@ -122,6 +161,9 @@ class Player:
             self.hp,
             self.energy,
             self.coins,
+            self.shards,
+            self.weapon,
+            self.armor,
             self.division,
             self.biome,
             self.total_days.days,
