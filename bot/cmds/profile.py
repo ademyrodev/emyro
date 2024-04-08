@@ -22,32 +22,36 @@ class ProfileCmd(Cmd):
         user = member or interaction.user
         player = players.find(user.id)
 
-        title = f":scroll: | {user.name}"
+        title = f":scroll: {user.name}"
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
         embed.add_field(
-            name=":fleur_de_lis: Division", value=self.division_desc(player)
-        )
+            name=":rocket: Leveling", 
+            value=f"""
+            :star: Level: {player.level}
 
-        embed.add_field(name=":star: Level", value=str(player.level))
+            :sparkles: XP: {ui.progress_bar(player.xp, player.req_xp)}
+            {self.division_desc(player)}
+            """
+        )
 
         embed.add_field(
-            name=":sparkles: XP", value=ui.progress_bar(player.xp, player.req_xp)
+            name=":bar_chart: Stats", 
+            value=f"""
+            :heart: HP: {ui.progress_bar(player.hp, player.hp, show_percent=False)}
+            :zap: Energy: {ui.progress_bar(player.energy, player.energy, show_percent=False)} 
+            :dagger: Weapon: {player.weapon.name} 
+            :shield: Armor: {player.armor.name}
+            """
         )
 
-        # not actually a progress bar, we're tricking players here
-        hp_bar = ui.progress_bar(player.hp, player.hp, show_percent=False)
-        embed.add_field(name=":heart: HP", value=hp_bar)
-
-        # same story here
-        energy_bar = ui.progress_bar(player.energy, player.energy, show_percent=False)
-        embed.add_field(name=":zap: Energy", value=energy_bar)
-
-        embed.add_field(name=":coin: Coins", value=player.coins)
-        embed.add_field(name=":gem: Shards", value=player.shards)
-
-        embed.add_field(name=":dagger: Weapon", value=player.weapon.name)
-        embed.add_field(name=":shield: Armor", value=player.armor.name)
+        embed.add_field(
+            name=":moneybag: Purse",
+            value=f"""
+            :coin: Coins: {player.coins}
+            :gem: Shards: {player.shards}
+            """
+        )
 
         await interaction.response.send_message(embed=embed)
 
@@ -65,4 +69,4 @@ class ProfileCmd(Cmd):
         return f"""
         {divisions.display(player.division)}
         {next_division_name} **unlocked in {required} more levels!**  
-        """
+        """.trim()
