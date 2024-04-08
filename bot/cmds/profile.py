@@ -26,16 +26,6 @@ class ProfileCmd(Cmd):
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
         embed.add_field(
-            name=":rocket: Leveling", 
-            value=f"""
-            :star: Level: {player.level}
-
-            :sparkles: XP: {ui.progress_bar(player.xp, player.req_xp)}
-            {self.division_desc(player)}
-            """
-        )
-
-        embed.add_field(
             name=":bar_chart: Stats", 
             value=f"""
             :heart: HP: {ui.progress_bar(player.hp, player.hp, show_percent=False)}
@@ -44,6 +34,16 @@ class ProfileCmd(Cmd):
             :shield: Armor: {player.armor.name}
             """
         )
+
+        embed.add_field(
+            name=":rocket: Leveling", 
+            value=f"""
+            :star: Level: {player.level}
+            :sparkles: XP: {ui.progress_bar(player.xp, player.req_xp)}
+            {self.division_desc(player)}
+            """
+        )
+
 
         embed.add_field(
             name=":moneybag: Purse",
@@ -69,4 +69,4 @@ class ProfileCmd(Cmd):
         return f"""
         {divisions.display(player.division)}
         {next_division_name} **unlocked in {required} more levels!**  
-        """.trim()
+        """.strip()
