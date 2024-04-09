@@ -26,31 +26,30 @@ class ProfileCmd(Cmd):
         embed = nextcord.Embed(title=title, color=0xFF0000)
 
         embed.add_field(
-            name=":bar_chart: Stats", 
+            name=":bar_chart: Stats",
             value=f"""
             :heart: HP: {ui.progress_bar(player.hp, player.hp, show_percent=False)}
             :zap: Energy: {ui.progress_bar(player.energy, player.energy, show_percent=False)} 
             :dagger: Weapon: {player.weapon.name} 
             :shield: Armor: {player.armor.name}
-            """
+            """,
         )
 
         embed.add_field(
-            name=":rocket: Leveling", 
+            name=":rocket: Leveling",
             value=f"""
             :star: Level: {player.level}
             :sparkles: XP: {ui.progress_bar(player.xp, player.req_xp)}
             {self.division_desc(player)}
-            """
+            """,
         )
-
 
         embed.add_field(
             name=":moneybag: Purse",
             value=f"""
             :coin: Coins: {player.coins}
             :gem: Shards: {player.shards}
-            """
+            """,
         )
 
         await interaction.response.send_message(embed=embed)
