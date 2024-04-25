@@ -5,15 +5,23 @@ from bot.game.spell import Spell
 
 
 class Consumable:
-    def __init__(self, name: str, spell: Spell, is_harmful: bool, contains_seed: bool):
+    def __init__(
+        self,
+        name: str,
+        spell: Spell,
+        is_harmful: bool,
+        contains_seed: bool,
+        amount: int,
+    ):
         self.name = name
         self.spell = spell
         self.is_harmful = is_harmful
         self.contains_seed = contains_seed
+        self.amount = amount
 
     @staticmethod
     def none():
-        return Consumable("None", None, False)
+        return Consumable("None", None, False, False, 0)
 
     @staticmethod
     def from_json(as_dict: dict):
@@ -21,8 +29,9 @@ class Consumable:
         spell = Spell.from_json(as_dict["spell"])
         is_harmful = as_dict["is_harmful"]
         contains_seed = as_dict["contains_seed"]
+        amount = as_dict["amount"]
 
-        return Consumable(name, spell, is_harmful, contains_seed)
+        return Consumable(name, spell, is_harmful, contains_seed, amount)
 
     def as_dict(self):
         as_dict = {
@@ -30,6 +39,7 @@ class Consumable:
             "spell": self.spell.as_dict(),
             "is_harmful": self.is_harmful,
             "contains_seed": self.contains_seed,
+            "amount": self.amount,
         }
 
         return as_dict
@@ -59,6 +69,9 @@ class Inventory:
 
     def is_full(self):
         return len(self.items) == 8
+
+    def is_empty(self):
+        return len(self.items) == 0
 
     def json(self):
         as_list = [c.as_dict() for c in self.items]
