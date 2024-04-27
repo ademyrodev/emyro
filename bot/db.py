@@ -50,6 +50,14 @@ INIT_STMTS = [
     )
     """,
     """
+    CREATE TABLE IF NOT EXISTS inventories (
+        player_id INT PRIMARY KEY,
+        content TEXT, 
+
+        FOREIGN KEY (player_id) REFERENCES players(id)
+    )
+    """,
+    """
     INSERT OR REPLACE INTO biomes VALUES (0, ':herb: Selva Esmeralda')
     """,
     """

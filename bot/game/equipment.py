@@ -26,8 +26,8 @@ class Equipment:
         return Equipment("None", Nature.NONE, [], 0, 0, 0)
 
     @staticmethod
-    def from_json(player_json: str):
-        as_dict = json.loads(player_json)
+    def from_json(equipment_json: str):
+        as_dict = json.loads(equipment_json)
 
         name = as_dict["name"]
         nature = Nature(as_dict["nature"])
