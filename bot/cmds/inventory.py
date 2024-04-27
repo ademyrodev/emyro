@@ -20,7 +20,7 @@ class InventoryCmd(Cmd):
         player = players.find(user.id)
         inventory = player.inventory
 
-        title = f"{user.name}'s inventory"
+        title = f":pouch: {user.name}'s inventory"
 
         desc = ""
         if inventory.is_empty():
