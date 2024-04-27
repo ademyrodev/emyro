@@ -20,7 +20,7 @@ class InventoryCmd(Cmd):
         player = players.find(user.id)
         inventory = player.inventory
 
-        title = f"{user.name}'s inventory"
+        title = f":pouch: {user.name}'s inventory"
 
         desc = ""
         if inventory.is_empty():
@@ -30,5 +30,5 @@ class InventoryCmd(Cmd):
 
             desc = "".join(items_format)
 
-        embed = nextcord.Embed(title=title, description=desc, color=0x0000FF)
+        embed = nextcord.Embed(title=title, description=desc, color=0x3498DB)
         await interaction.response.send_message(embed=embed)
