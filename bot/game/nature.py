@@ -14,7 +14,7 @@ class Nature(Enum):
     DECAY = 9
 
     def defeats(self, other):
-        return nature in ADVANTAGES[self.value]
+        return other in ADVANTAGES[self.value]
 
     def __plus__(self, other):
         if self.value == other.value:
@@ -35,7 +35,7 @@ ADVANTAGES = {
     Nature.DECAY: [Nature.FIRE, Nature.EARTH, Nature.FROST],
 }
 
-COMBINATIONS: {
+COMBINATIONS = {
     Nature.NONE: [
         Nature.FIRE,
         Nature.AIR,

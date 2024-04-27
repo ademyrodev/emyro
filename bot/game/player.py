@@ -2,6 +2,7 @@ import bot.game.biomes as biomes
 from bot.db import Db
 from bot.game.biomes import DayNightCounter
 from bot.game.equipment import Equipment
+from bot.game.inventory import Inventory
 from bot.logger import Logger
 
 
@@ -22,6 +23,7 @@ class Player:
         biome: int,
         total_days: DayNightCounter,
         biomes: list[DayNightCounter],
+        inventory: Inventory,
     ):
 
         self.id = id
@@ -36,8 +38,9 @@ class Player:
         self.armor = armor
         self.division = division
         self.biome = biome
-        self.biomes = biomes
         self.total_days = total_days
+        self.biomes = biomes
+        self.inventory = inventory
 
     @staticmethod
     def default(id):
@@ -58,15 +61,16 @@ class Player:
             0,
             DayNightCounter.default(),
             biomes,
+            Inventory.empty(),
         )
 
     @staticmethod
     def from_raw(data):
-        total_days = data[-3]
-        total_nights = data[-2]
+        total_days = data[-4]
+        total_nights = data[-3]
 
-        data[-3] = DayNightCounter(total_days, total_nights)
-        del data[-2]
+        data[-4] = DayNightCounter(total_days, total_nights)
+        del data[-3]
 
         return Player(*data)
 
@@ -103,6 +107,18 @@ class Player:
 
         player_data.append(biome_days)
 
+        inventory_json = Db.fetch(
+            """
+            SELECT content FROM inventories
+            WHERE player_id = ?
+            """,
+            player_id,
+        )[0][0]
+
+        inventory = Inventory.from_json(inventory_json)
+
+        player_data.append(inventory)
+
         return Player.from_raw(player_data)
 
     @staticmethod
@@ -129,6 +145,10 @@ class Player:
 
         for b in biomes.ids():
             Db.commit("INSERT INTO biome_days VALUES (?, ?, ?, ?)", player_id, b, 0, 0)
+
+        Db.commit(
+            "INSERT INTO inventories VALUES (?, ?)", player_id, player.inventory.json()
+        )
 
         Logger.info("Added new player", player_id, "to the database.")
 
@@ -166,6 +186,16 @@ class Player:
             self.biome,
             self.total_days.days,
             self.total_days.nights,
+            self.id,
+        )
+
+        Db.commit(
+            """
+            UPDATE inventories SET
+                content = ?
+            WHERE player_id = ?
+            """,
+            self.inventory.json(),
             self.id,
         )
 
