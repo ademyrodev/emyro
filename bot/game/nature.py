@@ -7,11 +7,9 @@ class Nature(Enum):
     AIR = 2
     WATER = 3
     EARTH = 4
-    LIGHT = 5
-    DARK = 6
-    FROST = 7
-    SAND = 8
-    DECAY = 9
+    FROST = 5
+    SAND = 6
+    DECAY = 7
 
     def defeats(self, other):
         return other in ADVANTAGES[self.value]
