@@ -30,5 +30,5 @@ class InventoryCmd(Cmd):
 
             desc = "".join(items_format)
 
-        embed = nextcord.Embed(title=title, description=desc, color=0x0000FF)
+        embed = nextcord.Embed(title=title, description=desc, color=0x3498DB)
         await interaction.response.send_message(embed=embed)
