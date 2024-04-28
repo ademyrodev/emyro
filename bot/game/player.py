@@ -3,6 +3,7 @@ from bot.db import Db
 from bot.game.biomes import DayNightCounter
 from bot.game.equipment import Equipment
 from bot.game.inventory import Inventory
+from bot.game.spell import SpellBook
 from bot.logger import Logger
 
 
@@ -24,6 +25,7 @@ class Player:
         total_days: DayNightCounter,
         biomes: list[DayNightCounter],
         inventory: Inventory,
+        spellbook: SpellBook
     ):
 
         self.id = id
@@ -41,6 +43,7 @@ class Player:
         self.total_days = total_days
         self.biomes = biomes
         self.inventory = inventory
+        self.spellbook = spellbook
 
     @staticmethod
     def default(id):
@@ -62,15 +65,16 @@ class Player:
             DayNightCounter.default(),
             biomes,
             Inventory.empty(),
+            SpellBook.default()
         )
 
     @staticmethod
-    def from_raw(data):
-        total_days = data[-4]
-        total_nights = data[-3]
+    def from_raw(data: tuple):
+        total_days = data[-5]
+        total_nights = data[-4]
 
-        data[-4] = DayNightCounter(total_days, total_nights)
-        del data[-3]
+        data[-5] = DayNightCounter(total_days, total_nights)
+        del data[-4]
 
         return Player(*data)
 
@@ -116,8 +120,18 @@ class Player:
         )[0][0]
 
         inventory = Inventory.from_json(inventory_json)
-
         player_data.append(inventory)
+
+        spellbook_json = Db.fetch(
+            """
+            SELECT spells FROM spellbooks
+            WHERE player_id = ?
+            """,
+            player_id
+        )[0][0]
+
+        spellbook = SpellBook.from_json(spellbook_json)
+        player_data.append(spellbook)
 
         return Player.from_raw(player_data)
 
@@ -150,9 +164,13 @@ class Player:
             "INSERT INTO inventories VALUES (?, ?)", player_id, player.inventory.json()
         )
 
+        Db.commit(
+            "INSERT INTO spellbooks VALUES (?, ?)", player_id, player.spellbook.json()
+        )
+
         Logger.info("Added new player", player_id, "to the database.")
 
-        return [Db.fetch("SELECT * FROM players WHERE id = ?", player_id)]
+        return Db.fetch("SELECT * FROM players WHERE id = ?", player_id)
 
     def update(self):
         Db.commit(
@@ -189,16 +207,6 @@ class Player:
             self.id,
         )
 
-        Db.commit(
-            """
-            UPDATE inventories SET
-                content = ?
-            WHERE player_id = ?
-            """,
-            self.inventory.json(),
-            self.id,
-        )
-
         for b in biomes.ids():
             Db.commit(
                 """
@@ -212,5 +220,25 @@ class Player:
                 self.id,
                 b,
             )
+
+        Db.commit(
+            """
+            UPDATE inventories SET
+                content = ?
+            WHERE player_id = ?
+            """,
+            self.inventory.json(),
+            self.id,
+        )
+
+        Db.commit(
+            """
+            UPDATE spellbooks SET
+                spells = ?
+            WHERE player_id = ?
+            """,
+            self.spellbook.json(),
+            self.id
+        )
 
         Logger.info("Updated player with ID", self.id, "to the database.")

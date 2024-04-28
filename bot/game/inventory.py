@@ -24,9 +24,9 @@ class Consumable:
         return Consumable("None", None, False, False, 0)
 
     @staticmethod
-    def from_json(as_dict: dict):
+    def from_dict(as_dict: dict):
         name = as_dict["name"]
-        spell = Spell.from_json(as_dict["spell"])
+        spell = Spell.from_dict(as_dict["spell"])
         is_harmful = as_dict["is_harmful"]
         contains_seed = as_dict["contains_seed"]
         amount = as_dict["amount"]
@@ -57,7 +57,7 @@ class Inventory:
     def from_json(inventory_json: str):
         as_dict = json.loads(inventory_json)
 
-        as_list = [Consumable.from_json(e) for e in as_dict]
+        as_list = [Consumable.from_dict(e) for e in as_dict]
 
         return Inventory(as_list)
 
@@ -78,7 +78,7 @@ class Inventory:
 
         return json.dumps(as_list)
 
-    def __getitem__(self, index):
+    def __getitem__(self, index: int):
         return self.items[index]
 
 

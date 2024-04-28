@@ -58,6 +58,14 @@ INIT_STMTS = [
     )
     """,
     """
+    CREATE TABLE IF NOT EXISTS spellbooks (
+        player_id INT PRIMARY KEY,
+        spells TEXT,
+
+        FOREIGN KEY (player_id) REFERENCES players(id)
+    )
+    """,
+    """
     INSERT OR REPLACE INTO biomes VALUES (0, ':herb: Selva Esmeralda')
     """,
     """
