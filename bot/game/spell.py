@@ -11,9 +11,22 @@ from bot.logger import Logger
 class Intent(Enum):
     DAMAGE = 0
     HEAL = 1
+    DAMAGE_PLAYER = 2
+    HEAL_OPPONENT = 3
+    DAMAGE_ALLY = 4
+    HEAL_ALLY = 5
 
-    def __repr__(self):
-        return self.name.capitalize()
+    def __repr__(self):    
+        name = " ".join(
+            [
+                i.capitalize() 
+                for i in self.name.split("_")
+            ]
+        )
+
+        emoji = ":boom:" if name.startswith("Damage") else ":heart:"
+
+        return emoji + " " + name
 
 
 class Intensity(Enum):
@@ -83,12 +96,14 @@ class Spell:
         intent: Intent,
         intensity: Intensity,
         side_effect: Optional[Status] = None,
+        cost: Optional[int] = None
     ):
         self.name = name
         self.nature = nature
         self.intent = intent
         self.intensity = intensity
         self.side_effect = side_effect
+        self.cost = cost or self.energy_cost()
 
     @staticmethod
     def default():
@@ -111,6 +126,7 @@ class Spell:
             "intent": self.intent.value,
             "intensity": self.intensity.value,
             "side_effect": self.side_effect.as_dict() if self.side_effect is not None else None,
+            "cost": self.cost
         }
 
         return as_dict
@@ -128,13 +144,21 @@ class Spell:
             else None
         )
 
-        return Spell(name, nature, intent, intensity, side_effect)
+        cost = as_dict["cost"]
+
+        return Spell(name, nature, intent, intensity, side_effect, cost)
 
     @staticmethod
     def get_enhancements(enhancements: list):
         enhancements = [Spell.from_dict(e) for e in enhancements]
 
         return enhancements
+
+    def energy_cost(self):
+        if not self.side_effect:
+            return self.intensity.cost()
+
+        return self.intensity.cost() + self.side_effect.intensity.value * 5 + self.side_effect.turns
 
     def __repr__(self):
         return f"{self.name} {self.intensity.__repr__()}"

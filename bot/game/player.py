@@ -46,7 +46,7 @@ class Player:
         self.spellbook = spellbook
 
     @staticmethod
-    def default(id):
+    def default(id: str):
         biomes = [DayNightCounter.default()] * 4
 
         return Player(
