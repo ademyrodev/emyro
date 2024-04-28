@@ -22,7 +22,7 @@ class Nature(Enum):
         right = Nature(max(self.value, other.value))
 
         return COMBINATIONS[left][right]
-        
+
     def __repr__(self):
         return NAMES[self]
 
@@ -84,5 +84,5 @@ NAMES = {
     Nature.EARTH: ":leaves: Earth",
     Nature.FROST: ":snowflake: Frost",
     Nature.SAND: ":hourglass_flowing_sand: Sand",
-    Nature.DECAY: ":falled_leaf: Decay"
+    Nature.DECAY: ":falled_leaf: Decay",
 }

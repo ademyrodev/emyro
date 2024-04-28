@@ -25,7 +25,7 @@ class Player:
         total_days: DayNightCounter,
         biomes: list[DayNightCounter],
         inventory: Inventory,
-        spellbook: SpellBook
+        spellbook: SpellBook,
     ):
 
         self.id = id
@@ -65,7 +65,7 @@ class Player:
             DayNightCounter.default(),
             biomes,
             Inventory.empty(),
-            SpellBook.default()
+            SpellBook.default(),
         )
 
     @staticmethod
@@ -127,7 +127,7 @@ class Player:
             SELECT spells FROM spellbooks
             WHERE player_id = ?
             """,
-            player_id
+            player_id,
         )[0][0]
 
         spellbook = SpellBook.from_json(spellbook_json)
@@ -238,7 +238,7 @@ class Player:
             WHERE player_id = ?
             """,
             self.spellbook.json(),
-            self.id
+            self.id,
         )
 
         Logger.info("Updated player with ID", self.id, "to the database.")

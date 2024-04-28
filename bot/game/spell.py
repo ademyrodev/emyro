@@ -1,11 +1,10 @@
+import json
 from enum import Enum
 from typing import Optional
 
-import json
-
 from bot.game.nature import Nature
-from bot.util import roman
 from bot.logger import Logger
+from bot.util import roman
 
 
 class Intent(Enum):
@@ -16,13 +15,8 @@ class Intent(Enum):
     DAMAGE_ALLY = 4
     HEAL_ALLY = 5
 
-    def __repr__(self):    
-        name = " ".join(
-            [
-                i.capitalize() 
-                for i in self.name.split("_")
-            ]
-        )
+    def __repr__(self):
+        name = " ".join([i.capitalize() for i in self.name.split("_")])
 
         emoji = ":boom:" if name.startswith("Damage") else ":heart:"
 
@@ -96,7 +90,7 @@ class Spell:
         intent: Intent,
         intensity: Intensity,
         side_effect: Optional[Status] = None,
-        cost: Optional[int] = None
+        cost: Optional[int] = None,
     ):
         self.name = name
         self.nature = nature
@@ -112,21 +106,30 @@ class Spell:
             Nature.AIR,
             Intent.DAMAGE,
             Intensity.LOW,
-            None
+            None,
         )
 
         return default_spell
 
     def as_dict(self):
-        Logger.info("Saving spell", self, "with intent", self.intent, "and side effect of", self.side_effect)
+        Logger.info(
+            "Saving spell",
+            self,
+            "with intent",
+            self.intent,
+            "and side effect of",
+            self.side_effect,
+        )
 
         as_dict = {
             "name": self.name,
             "nature": self.nature.value,
             "intent": self.intent.value,
             "intensity": self.intensity.value,
-            "side_effect": self.side_effect.as_dict() if self.side_effect is not None else None,
-            "cost": self.cost
+            "side_effect": (
+                self.side_effect.as_dict() if self.side_effect is not None else None
+            ),
+            "cost": self.cost,
         }
 
         return as_dict
@@ -158,10 +161,15 @@ class Spell:
         if not self.side_effect:
             return self.intensity.cost()
 
-        return self.intensity.cost() + self.side_effect.intensity.value * 5 + self.side_effect.turns
+        return (
+            self.intensity.cost()
+            + self.side_effect.intensity.value * 5
+            + self.side_effect.turns
+        )
 
     def __repr__(self):
         return f"{self.name} {self.intensity.__repr__()}"
+
 
 class SpellBook:
     def __init__(self, spells: list[Spell]):
@@ -178,7 +186,7 @@ class SpellBook:
         spells = [Spell.from_dict(s) for s in as_list]
 
         return SpellBook(spells)
-        
+
     def add(self, spell: Spell):
         if self.is_full():
             raise FullSpellbookError()
@@ -198,5 +206,6 @@ class SpellBook:
 
     def __getitem__(self, index: int):
         return self.spells[index]
+
 
 class FullSpellbookError(Exception): ...
